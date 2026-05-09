@@ -38,49 +38,82 @@ def is_valid(row):
 # =========================
 # DUPLICATE KEY LOGIC
 # =========================
+# def make_key(df):
+
+#     cols = [
+#         "ADDRESS",
+#         "ZIP",
+#         "YEAR",
+#         "VOLUME",
+#         "PAGE"
+#     ]
+
+#     # Create missing columns safely
+#     for c in cols:
+
+#         if c not in df.columns:
+#             df[c] = ""
+
+#     return (
+#         df["ADDRESS"]
+#         .astype(str)
+#         .str.strip()
+#         .str.upper()
+
+#         + "|"
+
+#         + df["ZIP"]
+#         .astype(str)
+#         .str.strip()
+
+#         + "|"
+
+#         + df["YEAR"]
+#         .astype(str)
+#         .str.strip()
+
+#         + "|"
+
+#         + df["VOLUME"]
+#         .astype(str)
+#         .str.strip()
+
+#         + "|"
+
+#         + df["PAGE"]
+#         .astype(str)
+#         .str.strip()
+#     )
+
 def make_key(df):
 
-    cols = [
-        "ADDRESS",
-        "ZIP",
-        "YEAR",
-        "VOLUME",
-        "PAGE"
-    ]
+    def find_col(possible_names):
 
-    # Create missing columns safely
-    for c in cols:
+        for col in df.columns:
 
-        if c not in df.columns:
-            df[c] = ""
+            col_upper = str(col).upper().replace(" ", "_")
+
+            for p in possible_names:
+
+                if p in col_upper:
+                    return col
+
+        return None
+
+    address_col = find_col(["ADDRESS"])
+    zip_col = find_col(["ZIP"])
+    year_col = find_col(["YEAR"])
+    volume_col = find_col(["VOLUME"])
+    page_col = find_col(["PAGE"])
 
     return (
-        df["ADDRESS"]
-        .astype(str)
-        .str.strip()
-        .str.upper()
-
+        df[address_col].astype(str).str.strip().str.upper()
         + "|"
-
-        + df["ZIP"]
-        .astype(str)
-        .str.strip()
-
+        + df[zip_col].astype(str).str.strip()
         + "|"
-
-        + df["YEAR"]
-        .astype(str)
-        .str.strip()
-
+        + df[year_col].astype(str).str.strip()
         + "|"
-
-        + df["VOLUME"]
-        .astype(str)
-        .str.strip()
-
+        + df[volume_col].astype(str).str.strip()
         + "|"
-
-        + df["PAGE"]
-        .astype(str)
-        .str.strip()
+        + df[page_col].astype(str).str.strip()
     )
